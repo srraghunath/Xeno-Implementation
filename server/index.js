@@ -59,4 +59,12 @@ app.get('/api/download/:filename', (req, res) => {
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
+// Serve static files from the React client build directory
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
