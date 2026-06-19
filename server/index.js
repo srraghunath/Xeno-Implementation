@@ -63,7 +63,7 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Handle React routing, return all requests to React app
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
