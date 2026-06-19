@@ -58,8 +58,13 @@ function Upload({ setResults, setLoading, setError, loading }) {
 
     return (
         <div className="card upload-card">
-            <h2>Upload CSV File</h2>
-            <p className="card-sub">Supports order-level, product-level, and payment mode data</p>
+            <h2>
+                <svg className="chunk-icon-svg" style={{ color: 'var(--primary)', width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 13h6m-3-3v6m-9 1V4a2 2 0 012-2h6l2 2h6a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                </svg>
+                Upload Transaction Dataset
+            </h2>
+            <p className="card-sub">Drag and drop order, product, and payment CSV data sheets to initiate live validation</p>
 
             <div
                 className={`dropzone ${dragOver ? 'drag-over' : ''} ${file ? 'has-file' : ''}`}
@@ -77,22 +82,30 @@ function Upload({ setResults, setLoading, setError, loading }) {
                 />
                 {file ? (
                     <div className="file-selected">
-                        <span className="file-icon">📄</span>
+                        <div className="file-icon">
+                            <svg width="48" height="48" fill="none" stroke="var(--success)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
                         <span className="file-name">{file.name}</span>
                         <span className="file-size">{(file.size / 1024).toFixed(1)} KB</span>
                     </div>
                 ) : (
                     <div className="dropzone-placeholder">
-                        <span className="upload-icon">⬆</span>
-                        <p>Drag & drop your CSV here or <span className="link">browse</span></p>
-                        <p className="small">Only .csv files are accepted</p>
+                        <div className="upload-icon">
+                            <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                            </svg>
+                        </div>
+                        <p>Drag & drop your CSV here or <span className="link">browse files</span></p>
+                        <p className="small">Only standard .csv file types are accepted</p>
                     </div>
                 )}
             </div>
 
             <div className="options-row">
                 <div className="option-group">
-                    <label>Country Code (Phone Validation)</label>
+                    <label>Country (For Phone Length Rules)</label>
                     <select value={countryCode} onChange={(e) => setCountryCode(e.target.value)}>
                         {COUNTRY_CODES.map(c => (
                             <option key={c.code} value={c.code}>{c.label}</option>
@@ -101,13 +114,13 @@ function Upload({ setResults, setLoading, setError, loading }) {
                 </div>
 
                 <div className="option-group">
-                    <label>Chunk Size (rows per file)</label>
+                    <label>Splitting Chunk Size (rows per file)</label>
                     <input
                         type="number"
                         min="100"
                         max="10000"
                         value={chunkSize}
-                        onChange={(e) => setChunkSize(e.target.value)}
+                        onChange={(e) => setChunkSize(parseInt(e.target.value) || 500)}
                     />
                 </div>
             </div>
@@ -117,7 +130,7 @@ function Upload({ setResults, setLoading, setError, loading }) {
                 onClick={handleSubmit}
                 disabled={loading || !file}
             >
-                {loading ? 'Validating...' : 'Validate & Process'}
+                {loading ? 'Processing Dataset...' : 'Validate & Export Clean Chunks'}
             </button>
         </div>
     );
